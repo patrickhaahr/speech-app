@@ -7,21 +7,30 @@ A mobile application that converts speech into sign language animations, built w
 - Real-time speech recording
 - Speech-to-text conversion using Azure Speech Services
 - Mapping of text to sign language animations
-- Simple and intuitive user interface
+- Modern UI with Tailwind CSS styling
+- TypeScript support for better development experience
 
 ## Prerequisites
 
 - Node.js (v14 or later)
 - npm or yarn
-- Expo CLI
 - Azure Speech Services API key
 
 ## Project Structure
 
 ```
 speech-app/
-├── frontend/               # React Native app
+├── frontend/                # React Native app
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   ├── screens/       # Screen components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── services/      # API services
+│   │   └── types/         # TypeScript types
 │   ├── App.tsx            # Main application component
+│   ├── global.css         # Tailwind CSS styles
+│   ├── metro.config.js    # Metro bundler config
+│   ├── tailwind.config.js # Tailwind configuration
 │   └── package.json       # Frontend dependencies
 ├── backend/               # Node.js express server
 │   ├── src/
@@ -70,7 +79,7 @@ speech-app/
    npm install
    ```
 
-3. Start the Expo development server:
+3. Start Expo:
    ```bash
    npm start
    ```
@@ -79,11 +88,27 @@ speech-app/
 
 ## Usage
 
-1. Open the app on your mobile device
+1. Launch the app on your device
 2. Press the "Start Recording" button to begin recording your speech
 3. Speak clearly into the microphone
 4. Press "Stop Recording" when finished
 5. The app will process your speech and display the corresponding sign language animation
+
+## Technical Stack
+
+- **Frontend**:
+  - React Native
+  - TypeScript
+  - Tailwind CSS (via NativeWind)
+  - Axios for API requests
+  - Expo AV for audio recording
+
+- **Backend**:
+  - Node.js with Express
+  - TypeScript
+  - Azure Speech Services SDK
+  - CORS middleware
+  - Environment variables management
 
 ## Adding New Animations
 
@@ -92,13 +117,6 @@ To add new sign language animations:
 1. Create your animation video files
 2. Add them to the frontend assets directory
 3. Update the phrase mapping in `backend/src/services/speechService.ts`
-
-## Technical Notes
-
-- The app uses Azure Speech Services for speech-to-text conversion
-- Audio is converted to base64 before being sent to the backend
-- The backend maps recognized text to predefined animation identifiers
-- Currently supports a limited set of phrases for proof of concept
 
 ## Limitations
 
