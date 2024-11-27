@@ -1,133 +1,82 @@
-# Speech-to-Sign Language Translator App
+# Real-Time Speech Recognition App
 
-A mobile application that converts speech into sign language animations, built with React Native (Expo) and Node.js.
+A modern mobile application that provides real-time speech-to-text conversion using Azure Cognitive Services, built with React Native (Expo) and ASP.NET Core 8.0.
 
 ## Features
 
-- Real-time speech recording
-- Speech-to-text conversion using Azure Speech Services
-- Mapping of text to sign language animations
-- Modern UI with Tailwind CSS styling
-- TypeScript support for better development experience
+- Real-time speech-to-text transcription using Azure Cognitive Services
+- Continuous speech recognition with 3-second silence detection
+- Real-time text updates using SignalR websocket connection
+- Modern and responsive mobile UI built with React Native (Expo)
+- NativeWind (TailwindCSS) for consistent cross-platform styling
+- Robust .NET Core backend with clean architecture
+- Cross-platform support (iOS, Android, and Web) through Expo
+
+## Tech Stack
+
+### Frontend
+- React Native (Expo) and TypeScript
+- NativeWind (TailwindCSS) for styling
+- @microsoft/signalr for real-time updates
+- Axios for HTTP requests
+- Expo managed workflow with hot reloading
+
+### Backend
+- ASP.NET Core Web API (.NET 8.0)
+- Azure Cognitive Services Speech SDK
+- SignalR for real-time communication
+- Swagger/OpenAPI for API documentation
+- Environment variable configuration
+- Comprehensive error logging and monitoring
 
 ## Prerequisites
 
-- Node.js (v14 or later)
-- npm or yarn
-- Azure Speech Services API key
+- Node.js and npm
+- .NET 8.0 SDK
+- Azure Cognitive Services subscription
+- Environment variables:
+  - `AZURE_SPEECH_KEY`: Your Azure Speech Service API key
+  - `AZURE_SPEECH_REGION`: Your Azure region
 
-## Project Structure
+## Getting Started
 
-```
-speech-app/
-├── frontend/                # React Native app
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── screens/       # Screen components
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── services/      # API services
-│   │   └── types/         # TypeScript types
-│   ├── App.tsx            # Main application component
-│   ├── global.css         # Tailwind CSS styles
-│   ├── metro.config.js    # Metro bundler config
-│   ├── tailwind.config.js # Tailwind configuration
-│   └── package.json       # Frontend dependencies
-├── backend/               # Node.js express server
-│   ├── src/
-│   │   ├── app.ts        # Express application
-│   │   ├── types/        # TypeScript interfaces
-│   │   └── services/     # Business logic
-│   └── package.json      # Backend dependencies
-└── README.md
+1. Clone the repository
+
+2. Set up the backend:
+```bash
+cd backend
+dotnet restore
+dotnet run
 ```
 
-## Setup Instructions
+3. Set up the frontend:
+```bash
+cd frontend
+npm install
+npx expo start
+```
 
-### Backend Setup
+The backend will run on `http://localhost:5000` and Expo will provide options to run the app on your preferred platform (iOS, Android, or Web).
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+## API Endpoints
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+- POST `/api/speech/recognize`: Starts speech recognition
+- WebSocket `/speechHub`: SignalR hub for real-time text updates
 
-3. Create a .env file in the backend directory with your Azure credentials:
-   ```
-   AZURE_SPEECH_KEY=your_azure_speech_key_here
-   AZURE_SPEECH_REGION=your_azure_region_here
-   PORT=3000
-   ```
+## Development Features
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start Expo:
-   ```bash
-   npm start
-   ```
-
-4. Use the Expo Go app on your mobile device to scan the QR code and run the application
+- Expo Developer Tools for easy debugging and testing
+- Swagger UI available in development mode
+- CORS configured for local development
+- Comprehensive error logging
+- Clean architecture with dependency injection
+- Hot reloading for rapid development
 
 ## Usage
 
-1. Launch the app on your device
-2. Press the "Start Recording" button to begin recording your speech
-3. Speak clearly into the microphone
-4. Press "Stop Recording" when finished
-5. The app will process your speech and display the corresponding sign language animation
-
-## Technical Stack
-
-- **Frontend**:
-  - React Native
-  - TypeScript
-  - Tailwind CSS (via NativeWind)
-  - Axios for API requests
-  - Expo AV for audio recording
-
-- **Backend**:
-  - Node.js with Express
-  - TypeScript
-  - Azure Speech Services SDK
-  - CORS middleware
-  - Environment variables management
-
-## Adding New Animations
-
-To add new sign language animations:
-
-1. Create your animation video files
-2. Add them to the frontend assets directory
-3. Update the phrase mapping in `backend/src/services/speechService.ts`
-
-## Limitations
-
-- Currently supports only a few predefined phrases
-- Animations are placeholder text (need to be replaced with actual video files)
-- Requires internet connection for speech recognition
-
-## Future Improvements
-
-- Add more phrases and animations
-- Implement offline mode
-- Add support for different languages
-- Improve animation rendering
-- Add user preferences and settings
+1. Start both backend and frontend servers
+2. Launch the app on your preferred platform through Expo
+3. Click the "Start Recording" button to begin speech recognition
+4. Speak into your device's microphone
+5. View real-time transcription updates
+6. Recognition automatically stops after 3 seconds of silence
