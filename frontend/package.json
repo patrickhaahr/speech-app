@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
+    "@microsoft/signalr": "^8.0.7",
     "axios": "^1.6.7",
     "expo": "~52.0.11",
     "expo-av": "^15.0.1",

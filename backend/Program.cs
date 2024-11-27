@@ -1,4 +1,6 @@
 using Backend.Services;
+using Backend.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,29 +11,23 @@ Env.Load();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy => policy
-            .WithOrigins(
-                "http://localhost:3000",
-                "http://localhost:19006",
-                "http://localhost:8081",
-                "http://127.0.0.1:3000",
-                "http://127.0.0.1:19006",
-                "http://127.0.0.1:8081",
-                "http://192.168.1.14:8081",
-                "exp://192.168.1.14:8081"
-            )
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .AllowCredentials());
+            .AllowCredentials()
+            .SetIsOriginAllowed(_ => true);
+    });
 });
 
 // Register Speech Service
-builder.Services.AddScoped<ISpeechService, SpeechService>();
+builder.Services.AddSingleton<ISpeechService, SpeechService>();
 
 // Load configuration
 builder.Configuration
@@ -53,13 +49,14 @@ if (app.Environment.IsDevelopment())
 }
 
 // Add CORS before other middleware
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 
 // Disable HTTPS redirection for development
 // app.UseHttpsRedirection();
-
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<SpeechHub>("/speechHub");
 
 // Add logging middleware
 app.Use(async (context, next) =>

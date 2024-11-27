@@ -1,20 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import * as signalR from "@microsoft/signalr";
 
 const API_URL = "http://192.168.1.14:5000/api/speech/recognize";
+const SIGNALR_URL = "http://192.168.1.14:5000/speechHub";
 
 export function useAudioRecording() {
   const [isLoading, setIsLoading] = useState(false);
   const [transcribedText, setTranscribedText] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+
+  useEffect(() => {
+    // Create SignalR connection
+    const newConnection = new signalR.HubConnectionBuilder()
+      .withUrl(SIGNALR_URL)
+      .withAutomaticReconnect()
+      .build();
+
+    setConnection(newConnection);
+
+    // Start the connection
+    newConnection.start()
+      .catch(err => console.error("SignalR Connection Error: ", err));
+
+    // Set up the receiver
+    newConnection.on("ReceiveText", (text: string) => {
+      setTranscribedText(text);
+    });
+
+    // Clean up on unmount
+    return () => {
+      newConnection.stop();
+    };
+  }, []);
 
   async function startRecording() {
     try {
       setError(null);
-      setTranscribedText("");
       setIsLoading(true);
 
-      // Call backend directly to start recognition
+      // Call backend to start recognition
       const response = await axios.post(
         API_URL,
         {},
@@ -26,7 +52,7 @@ export function useAudioRecording() {
       );
 
       console.log("Backend response:", response.data);
-      setTranscribedText(response.data.text || "");
+      // Final text will be set through SignalR updates
     } catch (error) {
       console.error("Failed to process recording:", error);
       setError("Failed to process recording. Please try again.");
