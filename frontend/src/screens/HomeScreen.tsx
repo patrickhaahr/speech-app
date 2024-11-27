@@ -1,31 +1,39 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Audio } from 'expo-av';
-import { Video } from 'expo-av';
-import axios from 'axios';
+import React from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { RecordButton } from '../components/RecordButton';
-import { AnimationDisplay } from '../components/AnimationDisplay';
 import { useAudioRecording } from '../hooks/useAudioRecording';
 
 const API_URL = 'http://localhost:3000/api/speech';
 
 export function HomeScreen() {
-  const { isRecording, startRecording, stopRecording, isLoading, animation } = useAudioRecording();
+  const { 
+    startRecording, 
+    isLoading, 
+    transcribedText,
+    error 
+  } = useAudioRecording();
 
   return (
     <View className="flex-1 bg-white items-center justify-center p-5">
-      <Text className="text-2xl font-bold mb-8">Speech to Sign Language</Text>
+      <Text className="text-2xl font-bold mb-8">Speech to Text</Text>
       
       <RecordButton 
-        isRecording={isRecording}
-        onPress={isRecording ? stopRecording : startRecording}
+        onPress={startRecording}
+        disabled={isLoading}
+        isLoading={isLoading}
       />
 
-      {isLoading && (
-        <ActivityIndicator size="large" color="#3B82F6" className="mt-5" />
+      {error && (
+        <View className="mt-5 p-4 bg-red-100 rounded-lg w-full">
+          <Text className="text-red-800">{error}</Text>
+        </View>
       )}
 
-      <AnimationDisplay animation={animation} />
+      {transcribedText && (
+        <View className="mt-5 p-4 bg-gray-100 rounded-lg w-full">
+          <Text className="text-lg text-gray-800">{transcribedText}</Text>
+        </View>
+      )}
     </View>
   );
 }
