@@ -1,10 +1,11 @@
-# Real-Time Speech Recognition App
+# Real-Time Speech Recognition and Sign Language App
 
-A modern mobile application that provides real-time speech-to-text conversion using Azure Cognitive Services, built with React Native (Expo) and ASP.NET Core 8.0.
+A modern mobile application that provides real-time speech-to-text conversion and sign language translation using Azure Cognitive Services, built with React Native (Expo) and ASP.NET Core 8.0.
 
 ## Features
 
 - Real-time speech-to-text transcription using Azure Cognitive Services
+- Sign language detection and translation
 - Continuous speech recognition with 3-second silence detection
 - Real-time text updates using SignalR websocket connection
 - Modern and responsive mobile UI built with React Native (Expo)
@@ -62,6 +63,26 @@ The backend will run on `http://localhost:5000` and Expo will provide options to
 
 - POST `/api/speech/recognize`: Starts speech recognition
 - WebSocket `/speechHub`: SignalR hub for real-time text updates
+
+## Video Files Handling
+
+Video files (such as sign language recordings and demo videos) are not included in the repository to maintain a manageable repository size. These files should be:
+
+1. Added to `.gitignore`
+2. Stored in an external storage solution
+3. Referenced in documentation with download links or instructions for local testing
+
+To handle video files locally:
+1. Create a `videos` directory in your project
+2. Add the following line to your `.gitignore`:
+   ```
+   # Video files
+   **/*.mp4
+   **/*.mov
+   **/*.avi
+   videos/
+   ```
+3. Place your video files in the `videos` directory for local testing
 
 ## Development Features
 
