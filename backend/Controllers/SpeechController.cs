@@ -1,5 +1,6 @@
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using speech_app.Services;
 
 namespace Backend.Controllers;
 
@@ -8,11 +9,16 @@ namespace Backend.Controllers;
 public class SpeechController : ControllerBase
 {
     private readonly ISpeechService _speechService;
+    private readonly IAslVideoService _aslVideoService;
     private readonly ILogger<SpeechController> _logger;
 
-    public SpeechController(ISpeechService speechService, ILogger<SpeechController> logger)
+    public SpeechController(
+        ISpeechService speechService,
+        IAslVideoService aslVideoService,
+        ILogger<SpeechController> logger)
     {
         _speechService = speechService;
+        _aslVideoService = aslVideoService;
         _logger = logger;
     }
 
@@ -23,7 +29,12 @@ public class SpeechController : ControllerBase
         {
             _logger.LogInformation("Starting speech recognition");
             var recognizedText = await _speechService.RecognizeSpeechAsync();
-            return Ok(new { text = recognizedText });
+            var videoPath = await _aslVideoService.GetVideoPathForPhrase(recognizedText);
+            
+            return Ok(new { 
+                text = recognizedText,
+                videoPath = videoPath
+            });
         }
         catch (Exception ex)
         {

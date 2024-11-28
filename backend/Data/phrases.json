@@ -1,0 +1,29 @@
+{
+  "phrases": [
+    {
+      "text": "hello",
+      "videoPath": "/videos/ASL_HELLO.mp4",
+      "duration": 0
+    },
+    {
+      "text": "hi",
+      "videoPath": "/videos/ASL_HI.mp4",
+      "duration": 0
+    },
+    {
+      "text": "how are you",
+      "videoPath": "/videos/ASL_HOW_ARE_YOU.mp4",
+      "duration": 0
+    },
+    {
+      "text": "what's up",
+      "videoPath": "/videos/ASL_WHATS_UP.mp4",
+      "duration": 0
+    },
+    {
+      "text": "you good",
+      "videoPath": "/videos/ASL_YOU_GOOD.mp4",
+      "duration": 0
+    }
+  ]
+}

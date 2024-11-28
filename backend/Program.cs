@@ -2,6 +2,7 @@ using Backend.Services;
 using Backend.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using DotNetEnv;
+using speech_app.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,9 @@ builder.Services.AddCors(options =>
 // Register Speech Service
 builder.Services.AddSingleton<ISpeechService, SpeechService>();
 
+// Register ASL Video Service
+builder.Services.AddScoped<IAslVideoService, AslVideoService>();
+
 // Load configuration
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
@@ -51,8 +55,7 @@ if (app.Environment.IsDevelopment())
 // Add CORS before other middleware
 app.UseCors("AllowAll");
 
-// Disable HTTPS redirection for development
-// app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

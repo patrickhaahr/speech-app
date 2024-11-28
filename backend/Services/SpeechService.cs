@@ -27,7 +27,7 @@ public class SpeechService : ISpeechService
         var recognizer = new SpeechRecognizer(config);
         var lastRecognizedText = "";
         var recognitionEnded = new TaskCompletionSource<bool>();
-        var silenceTimer = new System.Timers.Timer(3000);
+        var silenceTimer = new System.Timers.Timer(2000);
         
         try
         {
