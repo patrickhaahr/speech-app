@@ -15,27 +15,38 @@ export function HomeScreen() {
   const [videoPath, setVideoPath] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const matchPhrase = (text: string, phrases: string[]) => {
+    return phrases.some(phrase => text.includes(phrase));
+  };
+
   useEffect(() => {
     if (transcribedText) {
       // Reset video state when new text is received
       setVideoPath(null);
       setIsPlaying(false);
       
-      // Use hardcoded video paths based on the transcribed text
-      const text = transcribedText.toLowerCase().trim();
-      if (text.includes('hello')) {
+      // Clean and normalize the text
+      const text = transcribedText.toLowerCase()
+        .trim()
+        .replace(/['".,!?]/g, '') // Remove punctuation
+        .replace(/\s+/g, ' ');    // Normalize spaces
+      
+      console.log('Cleaned phrase:', text); // Debug log
+
+      // Match phrases with variations
+      if (matchPhrase(text, ['hello'])) {
         setVideoPath('/videos/ASL_HELLO.mp4');
         setIsPlaying(true);
-      } else if (text.includes('hi')) {
+      } else if (matchPhrase(text, ['hi', 'hey'])) {
         setVideoPath('/videos/ASL_HI.mp4');
         setIsPlaying(true);
-      } else if (text.includes('how are you')) {
+      } else if (matchPhrase(text, ['how are you'])) {
         setVideoPath('/videos/ASL_HOW_ARE_YOU.mp4');
         setIsPlaying(true);
-      } else if (text.includes("what's up")) {
+      } else if (matchPhrase(text, ['whats up', "what's up"])) {
         setVideoPath('/videos/ASL_WHATS_UP.mp4');
         setIsPlaying(true);
-      } else if (text.includes('you good')) {
+      } else if (matchPhrase(text, ['you good', 'youre good', "you're good"])) {
         setVideoPath('/videos/ASL_YOU_GOOD.mp4');
         setIsPlaying(true);
       }
