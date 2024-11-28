@@ -28,14 +28,17 @@ public class SpeechService : ISpeechService
         var lastRecognizedText = "";
         var recognitionEnded = new TaskCompletionSource<bool>();
         var silenceTimer = new System.Timers.Timer(2000);
+        var isTimerDisposed = false;
         
         try
         {
             silenceTimer.AutoReset = false;
             silenceTimer.Elapsed += async (s, e) =>
             {
-                silenceTimer.Dispose();
-                await recognizer.StopContinuousRecognitionAsync();
+                if (!isTimerDisposed)
+                {
+                    await recognizer.StopContinuousRecognitionAsync();
+                }
             };
 
             recognizer.Recognizing += async (s, e) =>
@@ -43,8 +46,11 @@ public class SpeechService : ISpeechService
                 var text = e.Result.Text;
                 Console.WriteLine($"RECOGNIZING: {text}");
                 await _hubContext.Clients.All.SendAsync("ReceiveText", text);
-                silenceTimer.Stop();
-                silenceTimer.Start();
+                if (!isTimerDisposed)
+                {
+                    silenceTimer.Stop();
+                    silenceTimer.Start();
+                }
             };
 
             recognizer.Recognized += async (s, e) =>
@@ -54,8 +60,11 @@ public class SpeechService : ISpeechService
                     lastRecognizedText = e.Result.Text;
                     Console.WriteLine($"RECOGNIZED: {lastRecognizedText}");
                     await _hubContext.Clients.All.SendAsync("ReceiveText", lastRecognizedText);
-                    silenceTimer.Stop();
-                    silenceTimer.Start();
+                    if (!isTimerDisposed)
+                    {
+                        silenceTimer.Stop();
+                        silenceTimer.Start();
+                    }
                 }
             };
 
@@ -85,6 +94,7 @@ public class SpeechService : ISpeechService
         }
         finally
         {
+            isTimerDisposed = true;
             silenceTimer.Dispose();
             recognizer.Dispose();
         }
